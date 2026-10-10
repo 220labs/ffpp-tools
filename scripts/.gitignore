@@ -1,0 +1,8 @@
+# A Python template's `lib/` line, where a parent .gitignore has one, would hide scripts/lib/
+# (the tools' shared lookups): re-included here.
+!lib/
+# Fetched or generated, never committed: the fonts (fonts/fetch-fonts.sh) and Python's caches.
+fonts/*.ttf
+fonts/*.otf
+__pycache__/
+*.pyc
