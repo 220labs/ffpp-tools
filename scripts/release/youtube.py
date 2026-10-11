@@ -1027,6 +1027,17 @@ def cmd_auth(a, r):
     except ImportError:
         die(USAGE, 'youtube auth: needs pip3 install --user google-auth-oauthlib')
     libs()
+    # Only a Desktop client accepts the random loopback port below; a Web client's file (top-level key `web`)
+    # fails later in the browser as redirect_uri_mismatch, on a page that does not say why. Read the key only.
+    try:
+        with open(a.client_secrets) as f:
+            kind = list(json.load(f))
+    except (OSError, ValueError) as e:
+        die(USAGE, f'youtube auth: cannot read {a.client_secrets} as JSON: {e.__class__.__name__}')
+    if kind != ['installed']:
+        die(USAGE, f'youtube auth: {a.client_secrets} is a {"/".join(kind) or "unknown"} client, not a Desktop one. '
+                   'In the Cloud console: Clients, Create client, Application type "Desktop app", Download JSON, '
+                   'and pass that file.')
     flow = InstalledAppFlow.from_client_secrets_file(a.client_secrets, scopes=[SCOPE])
     say('A browser opens: sign in as the account that owns the channel and pick that channel.')
     creds = flow.run_local_server(port=0, access_type='offline', prompt='consent')

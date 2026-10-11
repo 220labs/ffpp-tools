@@ -3,7 +3,7 @@
 Every tool that writes a master (a cut, a mix, a QR tile) ends with landing.land(r, files,
 tool=...). In the FFPP pipeline the store is lib/store.py: the files move into place, go to the
 shared drive and the NAS, and get a row in MEDIA-MANIFEST.tsv. lib/store.py is the private
-storage layout and is not part of ffpp-tools (the public tools, 220labs/ffpp-tools); without it
+storage layout and is not part of griptruck (the public tools, 220labs/griptruck); without it
 the files stay where the tool wrote them, land says so and succeeds.
 A store that is present but fails to import is an error, never a quiet skip.
 """
