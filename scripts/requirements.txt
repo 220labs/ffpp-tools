@@ -18,3 +18,4 @@ playwright    # presskit: HTML to PDF (then: python3 -m playwright install chrom
 google-api-python-client  # youtube: the Data API v3 client (uploads, updates, captions, playlists)
 google-auth               # youtube: the refresh-token credentials
 google-auth-oauthlib      # youtube auth only, on a laptop: the one-time consent flow
+opencv-python # blur: YuNet face detection (its model is fetched by install_tools.sh)

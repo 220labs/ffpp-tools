@@ -1,13 +1,16 @@
-# ffpp-tools
+# griptruck
 
-The media tools behind FFPP Pictures' generative-AI films ([ffpp.pictures](https://ffpp.pictures)):
-cutting a film from an edit list, mixing it, timing a score, subtitles, labels, posters and a
-press kit. Each is a small Python script over ffmpeg, numpy and friends. They are glue, published
-as they are used, under the MIT licence.
+Media tools for generative-AI films, from 220 Labs: cutting a film from an edit list, mixing it,
+timing a score, subtitles, labels, posters and a press kit. Each is a small Python script over
+ffmpeg, numpy and friends. They are glue, published as they are used, under the MIT licence.
+Named for the grip truck, which brings every stand, rig and dolly a shoot needs to the set.
+
+FFPP Pictures ([ffpp.pictures](https://ffpp.pictures)) makes its films with them and
+contributes back.
 
 What is not here: the film-making method, the prompts, the generation driver, the upscaling
-workers and where the masters are stored. Those stay in the studio's private pipeline; these
-tools run without them.
+workers and where the masters are stored. Those stay in FFPP's private pipeline; these tools
+run without them.
 
 ## Install
 
@@ -15,7 +18,8 @@ tools run without them.
 - Python 3.9 or newer: `pip3 install --user -r scripts/requirements.txt`. The heavy ones are
   only needed by some tools: `librosa` (`gridcheck`, `lagscan`), `playwright` and its Chromium
   (`presskit`, then `python3 -m playwright install chromium`), `mido` (`notelist`), `qrcode` with
-  Pillow (`qr`).
+  Pillow (`qr`), `opencv-python` (`blur`, which also needs `sh scripts/blur/fetch-model.sh`:
+  OpenCV Zoo's YuNet face detector, 0.2 MB, MIT, checked against a pinned SHA-256).
 - `mix/devoice.py` and `mix/sep_chunks.py` run the BandIt Plus source-separation model on CPU
   with torch (and librosa, soundfile); their docstrings name the model checkout they expect.
 - Fonts: `sh scripts/fonts/fetch-fonts.sh` downloads the faces the cut, label and card tools name
@@ -35,8 +39,8 @@ Without the flags, `--text` is `$TEXT` or the current folder and `--media` is `$
 text folder. So, from a production folder:
 
 ```sh
-/path/to/ffpp-tools/scripts/bin/edl_cut --help
-/path/to/ffpp-tools/scripts/bin/mix --edl edl/film-v1.edl.tsv --stems r1/audio/stems --cues r1/audio/cues \
+/path/to/griptruck/scripts/bin/edl_cut --help
+/path/to/griptruck/scripts/bin/mix --edl edl/film-v1.edl.tsv --stems r1/audio/stems --cues r1/audio/cues \
     --spot audio/spotting-film-v1.tsv --prod r1/audio/film-v1-production.wav --out r1/audio/mix/film-mix-v1
 ```
 
@@ -63,14 +67,17 @@ in `derive --help` and `mix --help`.
 | `music/` | `assemble`, `gridcheck`, `lagscan`, `notelist`, `render_in_browser.js` | join generated music chunks into one cue on a sketch's timeline; does a take keep the sketch's grid; its lag in sliding windows; MIDI to the note list an in-browser renderer plays |
 | `subs/` | `make_srt`, `check-srt` | one SRT per language from the spotting sheet's spoken lines; a validator for the set |
 | `label/` | `label` | burn a take ID into review copies; clean masters are never touched |
-| `release/` | `poster`, `presskit` | posters in every size; a festival press kit as a PDF |
+| `blur/` | `blur` | faces of people who did not agree to be filmed: scan, pick the tracks, blur, check |
+| `release/` | `poster`, `presskit`, `youtube` | posters in every size; a festival press kit as a PDF; upload to your own YouTube channel and keep the videos matching a config |
 
 ## Landing
 
-A tool that writes a master ends by handing it to `scripts/lib/landing.py`. In the studio's own
+A tool that writes a master ends by handing it to `scripts/lib/landing.py`. In FFPP's own
 pipeline that step copies the file to shared storage and records it; here there is no store, so
 the file stays where the tool wrote it and the tool says so.
 
 ## Licence
 
 MIT, see [LICENSE](LICENSE). Copyright (c) 2026 220 Labs.
+
+A 220 Labs tool · https://220labs.dev/griptruck/

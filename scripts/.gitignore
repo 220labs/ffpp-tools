@@ -4,5 +4,6 @@
 # Fetched or generated, never committed: the fonts (fonts/fetch-fonts.sh) and Python's caches.
 fonts/*.ttf
 fonts/*.otf
+blur/models/
 __pycache__/
 *.pyc
